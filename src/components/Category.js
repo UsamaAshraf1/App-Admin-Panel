@@ -26,7 +26,7 @@ export default function Categories({ setName }) {
       toast("Categories loading, please wait...", {
         progress: true,
       });
-      const response = await axios.get(`${url}/v1/department/get/all`, {
+      const response = await axios.get(`${url}/v1/department/get`, {
         headers: { authtoken: authToken, sessionid: session_id },
       });
       toast.dismiss();

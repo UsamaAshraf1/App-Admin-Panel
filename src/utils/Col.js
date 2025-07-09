@@ -86,7 +86,7 @@ export const SERVICES_COLUMNS = [
 ];
 
 export const COLUMNS_CATEGORY = [
-  { Header: "NAME", accessor: "name" },
+  { Header: "NAME", accessor: "title" },
   {
     Header: "Desc",
     accessor: "shortDes",
@@ -120,7 +120,7 @@ export const COLUMNS_CATEGORY = [
 ];
 
 export const COLUMNS_Doctor = [
-  { Header: "NAME", accessor: "name" },
+  { Header: "NAME", accessor: "first_name" },
   { Header: "Gender", accessor: "gender" },
   { Header: "Professional Title", accessor: "professionalTitle" },
   {

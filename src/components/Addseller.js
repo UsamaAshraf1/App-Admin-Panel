@@ -195,7 +195,7 @@ export default function Addseller() {
       console.error(err);
     }
     try {
-      const rescat = await axios.get(`${url}/v1/department/get/all`, {
+      const rescat = await axios.get(`${url}/v1/department/get`, {
         headers: { authtoken: authToken, sessionid: session_id },
       });
       if (rescat) {

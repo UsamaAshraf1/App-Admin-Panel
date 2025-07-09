@@ -50,7 +50,7 @@ export default function Slots(props) {
 
       const doctorOptions = resData.map((doctor) => ({
         value: doctor.id,
-        label: doctor.name,
+        label: doctor.first_name + " " + doctor.last_name,
       }));
       setDoctors(doctorOptions);
     } catch (error) {

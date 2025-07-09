@@ -72,7 +72,7 @@ export default function AddDoctor(props) {
   }
 
   const getCategory = async function (props) {
-    const categoryRes = await axios.get(`${url}/v1/department/get/all`, {
+    const categoryRes = await axios.get(`${url}/v1/department/get`, {
       headers: { authtoken: authToken, sessionid: session_id },
     });
     // console.log(categoryRes.data.data);
@@ -395,7 +395,7 @@ export default function AddDoctor(props) {
           const formData = {
             // type,
             des,
-            name,
+            title:name,
             shortDes: des,
             media,
           };

@@ -66,7 +66,7 @@ export default function Addproduct(props) {
   // Fetch departments
   const fetchDepartments = async () => {
     try {
-      const response = await axios.get(`${url}/v1/department/get/all`, {
+      const response = await axios.get(`${url}/v1/department/get`, {
         headers: { authtoken: authToken, sessionid: session_id },
       });
       setDepartments(

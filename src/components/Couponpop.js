@@ -95,7 +95,7 @@ export default function Couponpop(props) {
 
   const fetchdata = async () => {
     const response = await axios
-      .get(`${url}/v1/department/get/all`, {
+      .get(`${url}/v1/department/get`, {
         headers: { authtoken: authToken, sessionid: session_id },
       })
       .catch((err) => console.log(err));

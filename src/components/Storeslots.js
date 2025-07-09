@@ -105,7 +105,7 @@ export default function Storeslots(props) {
 
       const doctorOptions = resData.map((doctor) => ({
         value: doctor.id,
-        label: doctor.name,
+        label: doctor.first_name + " " + doctor.last_name,
       }));
       setDoctors(doctorOptions);
       // setDoctors(resData); // Update state with fetched doctors
@@ -198,7 +198,7 @@ export default function Storeslots(props) {
     toast("Store Slots loading, please wait", { progress: true });
     try {
       const response = await axios.get(
-        `${url}/v1/doctor/get-by-doctor/slots?docId=${selectedDoctorId}`,
+        `${url}/v1/doctor/get-doctor-slot?docId=${selectedDoctorId}`,
         { headers: { authtoken: authToken, sessionid: session_id } }
       );
       toast.dismiss();
