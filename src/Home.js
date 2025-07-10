@@ -325,7 +325,9 @@ export default function Home(props) {
                     <span>Discount Coupons</span>
                   </NavLink>
                 </li> */}
-                <li className={props.name === "Contact" ? "focused" : ""}>
+
+                
+                {/* <li className={props.name === "Contact" ? "focused" : ""}>
                   <NavLink to="Contact" className="big-font bar-link">
                     <div className="nav-icon">
                       <img
@@ -336,7 +338,7 @@ export default function Home(props) {
                     </div>
                     <span>Inquiry</span>
                   </NavLink>
-                </li>
+                </li> */}
               </>
             ) : (
               <li
