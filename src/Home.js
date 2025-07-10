@@ -201,7 +201,7 @@ export default function Home(props) {
                     <span>Doctor</span>
                   </NavLink>
                 </li>
-                <li
+                {/* <li
                   className={props.name === "service_package" ? "focused" : ""}
                 >
                   <NavLink to="/service_package" className="big-font">
@@ -210,7 +210,7 @@ export default function Home(props) {
                     </div>
                     <span>Service Packages</span>
                   </NavLink>
-                </li>
+                </li> */}
                 {/* <li className={props.name === "Sellers" ? "focused" : ""}>
                   <NavLink to="/sellers" className="big-font">
                     <div className="nav-icon">
