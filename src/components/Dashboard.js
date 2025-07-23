@@ -96,7 +96,7 @@ export default function Dashboard(props) {
     <div className="content dashboard-content">
       {/* <Pushpop trigger={popup} setTrigger={setPopup} /> */}
       <div className="top">
-        {/* <div className="add-link">
+        <div className="add-link">
           <div className="tab" style={{ backgroundColor: "grey" }}>
             <button
               className="cat-popup page-big-headings"
@@ -113,7 +113,7 @@ export default function Dashboard(props) {
             </span>
           </div>
         </div>
-        <div className="add-link">
+        {/* <div className="add-link">
           <div className="tab" style={{ backgroundColor: "grey" }}>
             <button
               className="cat-popup page-big-headings"

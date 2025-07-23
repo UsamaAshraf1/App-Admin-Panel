@@ -60,10 +60,10 @@ export default function Carouselcreatepop(props) {
 
     try {
       let formData = new FormData();
-      formData.append("image", picture);
+      formData.append("media", picture);
       formData.append("des", carousel.des);
-      formData.append("category", carousel.category);
-      formData.append("status", carousel.status);
+      formData.append("category", null);
+      formData.append("status", true);
       const response = await axios.post(
         `${url}/v1/app/carasoule/add`,
         formData,
@@ -121,7 +121,7 @@ export default function Carouselcreatepop(props) {
             />
           </div>
           <div className="linkedpop">
-            <div className="form-row">
+            {/* <div className="form-row">
               <span className="form-headings half">Category</span>
               <span className="form-headings half">Status</span>
             </div>
@@ -146,7 +146,7 @@ export default function Carouselcreatepop(props) {
                 onChange={handleChange}
                 className="popSelect"
               />
-            </div>
+            </div> */}
             <div className="linkedpop">
               <span className="form-headings half">Upload Image</span>
               <div className="form-row">
