@@ -39,7 +39,7 @@ export default function Allorders(props) {
     });
     try {
       const response = await axios.get(
-        `${url}/v1/order/latest/get?pageNumber=${page}`,
+        `${url}/v1/order/get-all?pageNumber=${page}`,
         {
           headers: { authtoken: authToken, sessionid: session_id },
         }

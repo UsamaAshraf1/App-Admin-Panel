@@ -563,14 +563,14 @@ export default function Addseller() {
           obj["suid"] = obj.tenant_id;
           obj["commission_rate"] = obj.commission_rate;
           obj["shipmentFee"] = obj.shipmentFee;
-          const resupdate = await axios.post(`${url}/v1/seller/update`, obj, {
-            headers: { authtoken: authToken, sessionid: session_id },
-          });
+          // const resupdate = await axios.post(`${url}/v1/seller/update`, obj, {
+          //   headers: { authtoken: authToken, sessionid: session_id },
+          // });
           // console.log(resupdate);
           const formData = seller;
           // console.log(formData);
           const response = await axios.post(
-            `${url}/v1/store/create`,
+            `${url}/v1/clinic/create`,
             formData,
             { headers: { authtoken: authToken, sessionid: session_id } }
           );

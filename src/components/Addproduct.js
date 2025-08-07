@@ -20,9 +20,12 @@ export default function Addproduct(props) {
   );
   const [store_id] = useState(props.storeId || previousData?.store_id || "");
 
+  console.log(store_id);
+
   // State for doctor fields
   const [doctor, setDoctor] = useState({
-    name: previousData?.name || "",
+    clinic_id: previousData?.clinic_id || "",
+    first_name: previousData?.first_name || "",
     gender: previousData?.gender || "",
     nationality: previousData?.nationality || "",
     personalMobileNumber: previousData?.personalMobileNumber || "",
@@ -85,7 +88,8 @@ export default function Addproduct(props) {
   useEffect(() => {
     setPreviousData(location.state?.data || props.previousData || "");
     setDoctor({
-      name: previousData?.name || "",
+      clinic_id: previousData?.clinic_id || "",
+      first_name: previousData?.first_name || "",
       gender: previousData?.gender || "",
       nationality: previousData?.nationality || "",
       personalMobileNumber: previousData?.personalMobileNumber || "",
@@ -186,6 +190,7 @@ export default function Addproduct(props) {
       });
       toast.success(previousData?.id ? "Doctor updated" : "Doctor created");
       setDoctor({
+        clinic_id: "",
         name: "",
         gender: "",
         nationality: "",
@@ -236,6 +241,7 @@ export default function Addproduct(props) {
       // }
       const formData = {
         ...doctor,
+        clinic_id: store_id,
         id: previousData?.id, // Include id for updates
         profilePhoto: profilePhotoUrl || doctor.profilePhoto,
         degreeCertificate: degreeCertificateUrl || doctor.degreeCertificate,
@@ -272,7 +278,7 @@ export default function Addproduct(props) {
               <img src={backicon} alt="back" className="back-icon" />
             </button>
           </div>
-          <span className="form-heading">{doctor.name || "Add Doctor"}</span>
+          <span className="form-heading">{doctor.first_name || "Add Doctor"}</span>
           <button type="submit" className="submit-btn addp">
             {previousData?.id ? "Update" : "Create"}
           </button>
@@ -298,10 +304,10 @@ export default function Addproduct(props) {
               <input
                 required
                 type="text"
-                name="name"
-                placeholder="Name"
+                name="first_name"
+                placeholder="Name *"
                 className="field"
-                value={doctor.name}
+                value={doctor.first_name}
                 onChange={handleDoctorChange}
               />
               <Select
@@ -313,13 +319,13 @@ export default function Addproduct(props) {
                     target: { name: "gender", value: e.value },
                   })
                 }
-                placeholder="Gender"
+                placeholder="Gender *"
               />
               <input
                 required
                 type="text"
                 name="nationality"
-                placeholder="Nationality"
+                placeholder="Nationality *"
                 className="field"
                 value={doctor.nationality}
                 onChange={handleDoctorChange}
@@ -328,7 +334,7 @@ export default function Addproduct(props) {
                 required
                 type="text"
                 name="personalMobileNumber"
-                placeholder="Personal Mobile Number"
+                placeholder="Personal Mobile Number *"
                 className="field"
                 value={doctor.personalMobileNumber}
                 onChange={handleDoctorChange}
@@ -337,7 +343,7 @@ export default function Addproduct(props) {
                 required
                 type="email"
                 name="personalEmailAddress"
-                placeholder="Personal Email Address"
+                placeholder="Personal Email Address *"
                 className="field"
                 value={doctor.personalEmailAddress}
                 onChange={handleDoctorChange}
@@ -346,7 +352,7 @@ export default function Addproduct(props) {
                 required
                 type="date"
                 name="licenseExpiryDate"
-                placeholder="License Expiry Date"
+                placeholder="License Expiry Date *"
                 className="field"
                 value={doctor.licenseExpiryDate}
                 onChange={handleDoctorChange}
@@ -355,7 +361,7 @@ export default function Addproduct(props) {
                 required
                 type="text"
                 name="regulatingAuthority"
-                placeholder="Regulating Authority"
+                placeholder="Regulating Authority *"
                 className="field"
                 value={doctor.regulatingAuthority}
                 onChange={handleDoctorChange}
@@ -364,7 +370,7 @@ export default function Addproduct(props) {
                 required
                 type="text"
                 name="professionalTitle"
-                placeholder="Professional Title"
+                placeholder="Professional Title *"
                 className="field"
                 value={doctor.professionalTitle}
                 onChange={handleDoctorChange}
@@ -373,7 +379,7 @@ export default function Addproduct(props) {
                 required
                 type="number"
                 name="fees"
-                placeholder="Fees"
+                placeholder="Fees *"
                 className="field"
                 value={doctor.fees}
                 onChange={handleDoctorChange}
@@ -382,7 +388,7 @@ export default function Addproduct(props) {
                 required
                 type="text"
                 name="primaryLocation"
-                placeholder="Primary Location"
+                placeholder="Primary Location *"
                 className="field"
                 value={doctor.primaryLocation}
                 onChange={handleDoctorChange}
@@ -391,7 +397,7 @@ export default function Addproduct(props) {
                 required
                 type="text"
                 name="experience"
-                placeholder="Experience (e.g., 12 years)"
+                placeholder="Experience (e.g., 12 years) *"
                 className="field"
                 value={doctor.experience}
                 onChange={handleDoctorChange}
@@ -401,7 +407,7 @@ export default function Addproduct(props) {
                 styles={{ control: customColor }}
                 value={doctor.languages}
                 onChange={(e) => handleArrayEvent(e, "languages")}
-                placeholder="Languages"
+                placeholder="Languages *"
                 className="field"
               />
               <div>
@@ -422,13 +428,13 @@ export default function Addproduct(props) {
                 styles={{ control: customColor }}
                 value={doctor.specialties}
                 onChange={(e) => handleArrayEvent(e, "specialties")}
-                placeholder="Specialties"
+                placeholder="Specialties *"
                 className="field"
               />
               <input
                 type="text"
                 name="FCPS"
-                placeholder="FCPS Certification"
+                placeholder="FCPS Certification *"
                 className="field"
                 value={doctor.educationCertifications.FCPS || ""}
                 onChange={handleEducationCertifications}
@@ -436,7 +442,7 @@ export default function Addproduct(props) {
               <input
                 type="text"
                 name="MRCP"
-                placeholder="MRCP Certification"
+                placeholder="MRCP Certification *"
                 className="field"
                 value={doctor.educationCertifications.MRCP || ""}
                 onChange={handleEducationCertifications}
@@ -445,7 +451,7 @@ export default function Addproduct(props) {
                 required
                 type="text"
                 name="degreeQualification"
-                placeholder="Degree Qualification"
+                placeholder="Degree Qualification *"
                 className="field"
                 value={doctor.degreeQualification}
                 onChange={handleDoctorChange}
@@ -454,7 +460,7 @@ export default function Addproduct(props) {
                 required
                 type="text"
                 name="universityName"
-                placeholder="University Name"
+                placeholder="University Name *"
                 className="field"
                 value={doctor.universityName}
                 onChange={handleDoctorChange}
@@ -463,7 +469,7 @@ export default function Addproduct(props) {
                 required
                 type="number"
                 name="yearOfGraduation"
-                placeholder="Year of Graduation"
+                placeholder="Year of Graduation *"
                 className="field"
                 value={doctor.yearOfGraduation}
                 onChange={handleDoctorChange}
@@ -473,7 +479,7 @@ export default function Addproduct(props) {
                 type="number"
                 step="0.1"
                 name="averageRating"
-                placeholder="Average Rating (e.g., 4.7)"
+                placeholder="Average Rating (e.g., 4.7) *"
                 className="field"
                 value={doctor.averageRating}
                 onChange={handleDoctorChange}
@@ -482,7 +488,7 @@ export default function Addproduct(props) {
                 required
                 name="aboutMe"
                 placeholder="About Me"
-                className="field description"
+                className="field description *"
                 value={doctor.aboutMe}
                 onChange={handleDoctorChange}
               />

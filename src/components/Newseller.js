@@ -44,7 +44,7 @@ export default function SellerAdd(props) {
         toast("please wait", {
           progress: true,
         });
-        const response = await axios.post(`${url}/v1/seller/signup`, formData, {
+        const response = await axios.post(`${url}/v1/clinic/signup`, formData, {
           headers: { authtoken: authToken, sessionid: session_id },
         });
         if (response) {

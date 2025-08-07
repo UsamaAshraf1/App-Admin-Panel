@@ -38,7 +38,7 @@ export default function Dashboard(props) {
     //   headers: { authtoken: authToken, session_id: session_id },
     // });
     const response = await axios.get(
-      `${url}/v1/order/get-all?pageNumber=1`,
+      `${url}/v1/clinic/orders?id=${props?.storeId}`,
 
       {
         headers: { authtoken: authToken, sessionid: session_id },
@@ -67,8 +67,8 @@ export default function Dashboard(props) {
     // if (authToken && session_id) {
     //   fetchdata();
     // }
-    props.setName("Dashboard");
-  }, [authToken && session_id]);
+    props.setName("Aggregator Dashboard");
+  }, [authToken && session_id, props?.storeId]);
 
   const notifScreen = (
     <div className="content dashboard-content">
@@ -131,10 +131,16 @@ export default function Dashboard(props) {
           </div>
         </div> */}
         <div className="add-link">
-          <div className="tab" style={{ backgroundColor: "rgba(61, 162, 218, .9)" }}>
+          <div
+            className="tab"
+            style={{ backgroundColor: "rgba(61, 162, 218, .9)" }}
+          >
             <button
               className="cat-popup page-big-headings"
-              style={{ backgroundColor: "rgba(61, 162, 218, .9)", color: "white" }}
+              style={{
+                backgroundColor: "rgba(61, 162, 218, .9)",
+                color: "white",
+              }}
               onClick={() => {
                 nav("/allorders");
                 // console.log("hello");

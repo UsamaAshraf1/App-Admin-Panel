@@ -63,6 +63,8 @@ function App() {
     setLogin(JSON.parse(localStorage.getItem("login") || false) ? true : false);
     setUserRole(localStorage.getItem("role") || "admin");
   }, []);
+
+  console.log(storeId)
   return (
     <div className="App">
       <Routes>
@@ -90,7 +92,7 @@ function App() {
             ></Route>
             <Route
               path="Department"
-              element={<Categories setName={setName} />}
+              element={<Categories setName={setName} storeId={storeId}/>}
             ></Route>
             <Route
               path="department_detail"

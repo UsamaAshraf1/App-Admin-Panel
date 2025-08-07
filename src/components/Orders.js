@@ -78,7 +78,7 @@ export default function Orders(props) {
     });
     try {
       const response = await axios.get(
-        `${url}/v1/order/get-all?pageNumber=1`,
+        `${url}/v1/clinic/orders?id=${props?.storeId}`,
         {
           headers: { authtoken: authToken, sessionid: session_id },
         }

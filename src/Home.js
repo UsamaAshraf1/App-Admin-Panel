@@ -61,7 +61,7 @@ export default function Home(props) {
   useEffect(() => {
     fetchdata();
   }, []);
-  const storesArray = store?.map((item) => item.store?.store_name);
+  const storesArray = store?.map((item) => item?.Clinic?.clinic_name);
   const stores = storesArray.filter((val) => val !== undefined);
   // console.log(stores);
   stores.sort();
@@ -74,10 +74,10 @@ export default function Home(props) {
   const handleStore = (e) => {
     e.preventDefault();
     const dropvalue = e.target.value;
-    const storeData = store.find((item) => item.store.store_name === dropvalue);
-    // console.log(storeData);
-    const id = storeData.store.sid;
-    // console.log(id);
+    const storeData = store.find((item) => item?.Clinic?.clinic_name === dropvalue);
+    console.log(storeData);
+    const id = storeData.Clinic.id;
+    console.log(id);
     props.setSellerId(storeData.suid);
     props.setStoreId(id);
   };
@@ -96,7 +96,7 @@ export default function Home(props) {
             <span className="page-heading">{props.name}</span>
           </div>
           <div className="profile">
-            {/* <div className="prof-btns">
+            <div className="prof-btns">
               <div>
                 <select
                   className="store-name"
@@ -106,7 +106,7 @@ export default function Home(props) {
                   {options}
                 </select>
               </div>
-            </div> */}
+            </div>
             {/* <div className="icon circle">
               <img src={bellicon} alt="icon" className="bell-icon" />
             </div>
@@ -127,7 +127,7 @@ export default function Home(props) {
                 {" "}
                 <li
                   className={
-                    props.name === "Dashboard" ||
+                    props.name === "Aggregator Dashboard" ||
                     props.name === "Carousels" ||
                     props.name === "All Orders"
                       ? "focused"
@@ -211,14 +211,14 @@ export default function Home(props) {
                     <span>Service Packages</span>
                   </NavLink>
                 </li> */}
-                {/* <li className={props.name === "Sellers" ? "focused" : ""}>
+                <li className={props.name === "Sellers" ? "focused" : ""}>
                   <NavLink to="/sellers" className="big-font">
                     <div className="nav-icon">
                       <img src={sellers} alt="union-icon" className="icon" />
                     </div>
                     <span>Seller and Store</span>
                   </NavLink>
-                </li> */}
+                </li>
                 <li className={props.name === "Doctor Slots" ? "focused" : ""}>
                   <NavLink to="store-slots" className="big-font bar-link">
                     <div className="nav-icon">
@@ -343,7 +343,7 @@ export default function Home(props) {
             ) : (
               <li
                 className={
-                  props.name === "Dashboard" ||
+                  props.name === "Aggregator Dashboard" ||
                   props.name === "Carousels" ||
                   props.name === "All Orders"
                     ? "focused"
