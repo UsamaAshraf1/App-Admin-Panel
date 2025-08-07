@@ -87,7 +87,7 @@ export default function Storeslots(props) {
       const authToken = localStorage.getItem("authToken") || "";
       const session_id = localStorage.getItem("session_id") || "";
 
-      const response = await axios.get(`${url}/v1/doctor/get-all`, {
+      const response = await axios.get(`${url}/v1/doctor/get-all-by-clinic?clinicId=${props?.storeId}`, {
         headers: { authtoken: authToken, sessionid: session_id },
         params: { store_id: props.storeId }, // Include storeId if required
       });
@@ -120,7 +120,7 @@ export default function Storeslots(props) {
 
   useEffect(() => {
     fetchAllDoctors();
-  }, []);
+  }, [props?.storeId]);
   console.log(Doctors);
 
   const handleDoctorChange = (selectedOption) => {

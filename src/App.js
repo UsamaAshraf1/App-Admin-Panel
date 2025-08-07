@@ -100,7 +100,7 @@ function App() {
             ></Route>
             <Route
               path="doctors"
-              element={<Doctors setName={setName} />}
+              element={<Doctors setName={setName} storeId={storeId} />}
             ></Route>
 
             <Route

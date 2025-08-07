@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { url } from "../utils/urls.js";
 
-export default function Doctors({ setName }) {
+export default function Doctors(props) {
   const nav = useNavigate();
   const [authToken] = useState(localStorage.getItem("authToken") || "");
   const [session_id] = useState(localStorage.getItem("session_id") || "");
@@ -24,9 +24,12 @@ export default function Doctors({ setName }) {
       toast("Categories loading, please wait...", {
         progress: true,
       });
-      const response = await axios.get(`${url}/v1/doctor/get-all`, {
-        headers: { authtoken: authToken, sessionid: session_id },
-      });
+      const response = await axios.get(
+        `${url}/v1/doctor/get-all-by-clinic?clinicId=${props?.storeId}`,
+        {
+          headers: { authtoken: authToken, sessionid: session_id },
+        }
+      );
       toast.dismiss();
 
       // Filter only main categories (those with an 'id' field)
@@ -35,6 +38,8 @@ export default function Doctors({ setName }) {
       setOriginalData(mainCategories); // Store main categories for search reset
     } catch (err) {
       toast.dismiss();
+      setCategories([]);
+      setOriginalData([]);
       toast.error("Failed to load categories");
       console.error("Fetch error:", err);
       if (err.response?.status === 401) {
@@ -63,9 +68,9 @@ export default function Doctors({ setName }) {
 
   useEffect(() => {
     fetchdata();
-    setName("doctors");
+    props?.setName("doctors");
     setSearchString("");
-  }, [authToken, session_id, setName, showPopup]); // Added missing dependencies
+  }, [authToken, session_id, props?.setName, showPopup, props?.storeId]); // Added missing dependencies
 
   const data = useMemo(() => categories, [categories]);
   const columns = useMemo(() => COLUMNS_Doctor, []);

@@ -36,7 +36,7 @@ export default function Slots(props) {
       const authToken = localStorage.getItem("authToken") || "";
       const session_id = localStorage.getItem("session_id") || "";
 
-      const response = await axios.get(`${url}/v1/doctor/get-all`, {
+      const response = await axios.get(`${url}/v1/doctor/get-all-by-clinic?clinicId=${props?.storeId}`, {
         headers: { authtoken: authToken, sessionid: session_id },
         params: { store_id: props.storeId },
       });
@@ -61,7 +61,7 @@ export default function Slots(props) {
 
   useEffect(() => {
     fetchAllDoctors();
-  }, []);
+  }, [props?.storeId]);
 
   const fetchdata = async (year, month) => {
     try {
