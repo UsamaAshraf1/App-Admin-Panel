@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { url } from "../utils/urls.js";
 
-export default function Categories({ setName }) {
+export default function Categories({ setName, storeId }) {
   const nav = useNavigate();
   const [authToken] = useState(localStorage.getItem("authToken") || "");
   const [session_id] = useState(localStorage.getItem("session_id") || "");
@@ -26,18 +26,26 @@ export default function Categories({ setName }) {
       toast("Categories loading, please wait...", {
         progress: true,
       });
-      const response = await axios.get(`${url}/v1/department/get`, {
-        headers: { authtoken: authToken, sessionid: session_id },
-      });
+      const response = await axios.get(
+        `${url}/v1/department/get-by-clinicId?id=${storeId}`,
+        {
+          headers: { authtoken: authToken, sessionid: session_id },
+        }
+      );
       toast.dismiss();
 
+      console.log(response);
       // Filter only main categories (those with an 'id' field)
-      const mainCategories = response.data.data.filter((item) => item.id);
+      const mainCategories = response?.data?.data?.departmentsWithCount?.filter(
+        (item) => item.id
+      );
       setCategories(mainCategories);
       setOriginalData(mainCategories); // Store main categories for search reset
     } catch (err) {
       toast.dismiss();
-      toast.error("Failed to load categories");
+      // toast.error("Failed to load Departments");
+      setCategories([]);
+      setOriginalData([]);
       console.error("Fetch error:", err);
       if (err.response?.status === 401) {
         nav("/login");
@@ -67,7 +75,7 @@ export default function Categories({ setName }) {
     fetchdata();
     setName("Department");
     setSearchString("");
-  }, [authToken, session_id, setName, showPopup]); // Added missing dependencies
+  }, [authToken, session_id, setName, showPopup, storeId]); // Added missing dependencies
 
   const data = useMemo(() => categories, [categories]);
   const columns = useMemo(() => COLUMNS_CATEGORY, []);
