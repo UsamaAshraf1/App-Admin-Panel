@@ -247,18 +247,29 @@ export default function Addproduct(props) {
       //   return;
       // }
       const formData = {
-        ...doctor,
-        last_name: "test",
+        // ...doctor,
+        // last_name: "test",
+        // clinic_id: store_id,
+        // id: previousData?.id,
+        // profilePhoto: profilePhotoUrl || doctor.profilePhoto,
+        // degreeCertificate: degreeCertificateUrl || doctor.degreeCertificate,
+        // specialistCertification:
+        //   specialistCertificateUrl || doctor.specialistCertification,
+        // languages: doctor.languages.map((lang) => lang.value),
+        // specialties: doctor.specialties.map((spec) => spec.value),
+        // fees: parseFloat(doctor.fees) || 0,
+        // averageRating: parseFloat(doctor.averageRating) || 0,
+        // services: [],
+
         clinic_id: store_id,
-        id: previousData?.id, // Include id for updates
-        profilePhoto: profilePhotoUrl || doctor.profilePhoto,
-        degreeCertificate: degreeCertificateUrl || doctor.degreeCertificate,
-        specialistCertification:
-          specialistCertificateUrl || doctor.specialistCertification,
-        languages: doctor.languages.map((lang) => lang.value),
-        specialties: doctor.specialties.map((spec) => spec.value),
-        fees: parseFloat(doctor.fees) || 0,
-        averageRating: parseFloat(doctor.averageRating) || 0,
+        first_name: doctor?.first_name,
+        last_name: doctor?.first_name,
+        departmentId: doctor?.departmentId,
+        phone_number: doctor?.personalMobileNumber,
+        email: doctor?.personalEmailAddress,
+        profile_image: "http://localhost:3000/doctors/add-doctor",
+        availability: {},
+        status: "active",
         services: [],
       };
       await formSubmit(formData);
