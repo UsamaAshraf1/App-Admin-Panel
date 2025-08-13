@@ -219,6 +219,17 @@ export default function Home(props) {
                     <span>Seller and Store</span>
                   </NavLink>
                 </li>
+
+                    <li
+                  className={props.name === "service_package" ? "focused" : ""}
+                >
+                  <NavLink to="/service_package" className="big-font">
+                    <div className="nav-icon">
+                      <img src={packages} alt="union-icon" className="icon" />
+                    </div>
+                    <span>Service Packages</span>
+                  </NavLink>
+                </li>
                 <li className={props.name === "Doctor Slots" ? "focused" : ""}>
                   <NavLink to="store-slots" className="big-font bar-link">
                     <div className="nav-icon">

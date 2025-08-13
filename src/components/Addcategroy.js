@@ -394,10 +394,12 @@ export default function Addcategroy(props) {
         try {
           const formData = {
             // type,
+            
             des,
-            title:name,
+            title: name,
             shortDes: des,
             media,
+            focusArea: "skin",
           };
           console.log(formData);
           const response = await axios.post(

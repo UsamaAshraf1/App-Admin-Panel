@@ -26,7 +26,7 @@ export default function Addproduct(props) {
   const [doctor, setDoctor] = useState({
     clinic_id: previousData?.clinic_id || "",
     first_name: previousData?.first_name || "",
-    gender: previousData?.gender || "",
+    // gender: previousData?.gender || "",
     nationality: previousData?.nationality || "",
     personalMobileNumber: previousData?.personalMobileNumber || "",
     personalEmailAddress: previousData?.personalEmailAddress || "",
@@ -51,7 +51,7 @@ export default function Addproduct(props) {
     yearOfGraduation: previousData?.yearOfGraduation || "",
     averageRating: previousData?.averageRating || "",
     aboutMe: previousData?.aboutMe || "",
-    department_id: previousData?.department_id || "",
+    departmentId: previousData?.departmentId || "",
   });
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [degreeCertificate, setDegreeCertificate] = useState(null);
@@ -69,11 +69,17 @@ export default function Addproduct(props) {
   // Fetch departments
   const fetchDepartments = async () => {
     try {
-      const response = await axios.get(`${url}/v1/department/get`, {
-        headers: { authtoken: authToken, sessionid: session_id },
-      });
+      const response = await axios.get(
+        `${url}/v1/department/get-by-clinicId?id=${props?.storeId}`,
+        {
+          headers: { authtoken: authToken, sessionid: session_id },
+        }
+      );
       setDepartments(
-        response.data.data.map((e) => ({ label: e.name, value: e.id }))
+        response?.data?.data?.departmentsWithCount?.map((e) => ({
+          label: e.title,
+          value: e.id,
+        }))
       );
     } catch (error) {
       console.error("Fetch departments error:", error);
@@ -90,7 +96,7 @@ export default function Addproduct(props) {
     setDoctor({
       clinic_id: previousData?.clinic_id || "",
       first_name: previousData?.first_name || "",
-      gender: previousData?.gender || "",
+      // gender: previousData?.gender || "",
       nationality: previousData?.nationality || "",
       personalMobileNumber: previousData?.personalMobileNumber || "",
       personalEmailAddress: previousData?.personalEmailAddress || "",
@@ -117,7 +123,7 @@ export default function Addproduct(props) {
       yearOfGraduation: previousData?.yearOfGraduation || "",
       averageRating: previousData?.averageRating || "",
       aboutMe: previousData?.aboutMe || "",
-      department_id: previousData?.department_id || "",
+      departmentId: previousData?.departmentId || "",
     });
     setMedia(previousData?.profilePhoto || "");
   }, [previousData, props.previousData, location.state]);
@@ -192,7 +198,7 @@ export default function Addproduct(props) {
       setDoctor({
         clinic_id: "",
         name: "",
-        gender: "",
+        // gender: "",
         nationality: "",
         personalMobileNumber: "",
         personalEmailAddress: "",
@@ -211,7 +217,8 @@ export default function Addproduct(props) {
         yearOfGraduation: "",
         averageRating: "",
         aboutMe: "",
-        department_id: "",
+        departmentId: "",
+        services: [],
       });
       setProfilePhoto(null);
       setDegreeCertificate(null);
@@ -241,6 +248,7 @@ export default function Addproduct(props) {
       // }
       const formData = {
         ...doctor,
+        last_name: "test",
         clinic_id: store_id,
         id: previousData?.id, // Include id for updates
         profilePhoto: profilePhotoUrl || doctor.profilePhoto,
@@ -251,6 +259,7 @@ export default function Addproduct(props) {
         specialties: doctor.specialties.map((spec) => spec.value),
         fees: parseFloat(doctor.fees) || 0,
         averageRating: parseFloat(doctor.averageRating) || 0,
+        services: [],
       };
       await formSubmit(formData);
     } catch (error) {
@@ -278,7 +287,9 @@ export default function Addproduct(props) {
               <img src={backicon} alt="back" className="back-icon" />
             </button>
           </div>
-          <span className="form-heading">{doctor.first_name || "Add Doctor"}</span>
+          <span className="form-heading">
+            {doctor.first_name || "Add Doctor"}
+          </span>
           <button type="submit" className="submit-btn addp">
             {previousData?.id ? "Update" : "Create"}
           </button>
@@ -496,11 +507,11 @@ export default function Addproduct(props) {
                 styles={{ control: customColor }}
                 options={departments}
                 value={departments.find(
-                  (opt) => opt.value === doctor.department_id
+                  (opt) => opt.value === doctor.departmentId
                 )}
                 onChange={(e) =>
                   handleDoctorChange({
-                    target: { name: "department_id", value: e.value },
+                    target: { name: "departmentId", value: e.value },
                   })
                 }
                 placeholder="Department"

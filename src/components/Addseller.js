@@ -62,8 +62,8 @@ export default function Addseller() {
       ? presviosData.store.store_name
       : "",
     email: presviosData?.email ? presviosData.email : "",
-    selling_type: presviosData?.store?.selling_type
-      ? presviosData.store.selling_type
+    clinic_type: presviosData?.store?.clinic_type
+      ? presviosData.store.clinic_type
       : "",
     service_list: presviosData?.store?.service_list
       ? presviosData.store.service_list
@@ -153,9 +153,9 @@ export default function Addseller() {
   );
   // console.log(presviosData);
   const seller_types = [
-    { label: "Product", value: "product" },
-    { label: "Service", value: "service" },
-    { label: "Both", value: "both" },
+    { label: "At Home", value: "in_House" },
+    { label: "In Clinic", value: "in_clinic" },
+    { label: "Telemedicine", value: "telemedicine" },
   ];
   const [seller_cat, setSeller_cat] = useState([]);
   const [popup, setPopup] = useState(false);
@@ -568,10 +568,30 @@ export default function Addseller() {
           // });
           // console.log(resupdate);
           const formData = seller;
-          // console.log(formData);
+          console.log(formData);
+          const Data = {
+            media: "",
+            clinic_name: formData?.store_name,
+            clinic_url: "",
+            description: formData?.description,
+            address: formData?.address,
+            latitude: 0,
+            longitude: 0,
+            // socialMediaLinks: {
+            //   facebook: "https://facebook.com/cityhealth",
+            //   instagram: "https://instagram.com/cityhealth",
+            //   twitter: "https://twitter.com/cityhealth",
+            // },
+            tenant_id: presviosData?.id,
+            status: "unverified",
+            clinic_type: formData?.clinic_type, //'in_House', 'in_clinic', 'telemedicine'
+            service_list: [],
+            clinic_open: formData?.store_open,
+            clinic_close: formData?.store_close,
+          };
           const response = await axios.post(
             `${url}/v1/clinic/create`,
-            formData,
+            Data,
             { headers: { authtoken: authToken, sessionid: session_id } }
           );
           if (response) {
@@ -722,8 +742,8 @@ export default function Addseller() {
         ? presviosData.store.store_name
         : "",
       email: presviosData?.email ? presviosData.email : "",
-      selling_type: presviosData?.store?.selling_type
-        ? presviosData.store.selling_type
+      clinic_type: presviosData?.store?.clinic_type
+        ? presviosData.store.clinic_type
         : "",
       service_list: presviosData?.store?.service_list
         ? presviosData.store.service_list
@@ -943,19 +963,19 @@ export default function Addseller() {
                   }}
                   options={seller_types}
                   defaultValue={
-                    seller.selling_type
+                    seller.clinic_type
                       ? {
                           label:
-                            seller.selling_type.charAt(0).toUpperCase() +
-                            seller.selling_type.slice(1),
-                          value: seller.selling_type,
+                            seller.clinic_type.charAt(0).toUpperCase() +
+                            seller.clinic_type.slice(1),
+                          value: seller.clinic_type,
                         }
                       : ""
                   }
-                  placeholder={" Selling Type"}
+                  placeholder={" Clinic Type"}
                   className="select-in"
-                  id="selling_type"
-                  name="selling_type"
+                  id="clinic_type"
+                  name="clinic_type"
                   onChange={handleSellerChange}
                   required
                 />

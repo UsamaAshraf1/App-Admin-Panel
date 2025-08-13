@@ -53,6 +53,7 @@ export default function SellerAdd(props) {
           toast("Seller created", { type: "success" });
           let data = response.data.user;
           data["store"] = { store_name: seller.store_name };
+          console.log(data)
           navgate("add-seller", {
             state: {
               data: data,

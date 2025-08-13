@@ -121,6 +121,7 @@ export default function Categories({ setName, storeId }) {
               relatedPCategory={relatedPCategory}
               categories={categories}
               setPreviousData={setPreviousData}
+              storeId={storeId}
             />
             <span className="med-font">Add new Department</span>
           </div>
