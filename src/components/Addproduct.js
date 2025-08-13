@@ -267,7 +267,7 @@ export default function Addproduct(props) {
         departmentId: doctor?.departmentId,
         phone_number: doctor?.personalMobileNumber,
         email: doctor?.personalEmailAddress,
-        profile_image: "http://localhost:3000/doctors/add-doctor",
+        profile_image: "https://static.thenounproject.com/png/1077596-200.png",
         availability: {},
         status: "active",
         services: [],
