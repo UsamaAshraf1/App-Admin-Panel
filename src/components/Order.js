@@ -391,8 +391,8 @@ export default function Order() {
                 <div className="ccustomer">
                   <div>
                     <span className="chead">
-                      {presviosData?.cart?.customer?.first_name
-                        ? presviosData.cart.customer.first_name
+                      {presviosData?.patient_info?.fName
+                        ? presviosData?.patient_info?.fName
                         : ""}
                     </span>
                   </div>
@@ -410,8 +410,8 @@ export default function Order() {
                 <div className="btm-part">
                   <span className="chead">Email</span>
                   <span className="ctext">
-                    {presviosData?.cart?.customer?.email
-                      ? presviosData.cart.customer.email
+                    {presviosData?.patient_info?.email
+                      ? presviosData?.patient_info?.email
                       : ""}
                   </span>
                 </div>

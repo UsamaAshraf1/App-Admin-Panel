@@ -172,96 +172,112 @@ export const COLUMNS_RESOURCES = [
 ];
 
 export const COLUMNS_SELLER = [
-  { Header: "ID", accessor: "seller_id" },
+  // { Header: "ID", accessor: "id" },
   { Header: "USER NAME", accessor: "last_name" },
-  { Header: "NAME", accessor: "first_name" },
+  // { Header: "NAME", accessor: "first_name" },
   { Header: "EMAIL", accessor: "email" },
+  { Header: "Clinic Name", accessor: "Clinic.clinic_name" },
+  // { Header: "Type", accessor: "Clinic.clinic_type" },
   {
-    Header: "SELLER STATUS",
-    accessor: "status",
-    Cell: (props) => {
-      return (
-        <div
-          style={{
-            backgroundColor:
-              props.value === "verified"
-                ? " #D1FAE5"
-                : props.value == "unverified"
-                ? "#FEE2E2"
-                : "#FEF3C7",
-            borderRadius: 15,
-            padding: 6,
-            textAlign: "center",
-            color:
-              props.value === "verified"
-                ? " #065F46"
-                : props.value === "unverified"
-                ? "#991B1B"
-                : "#92400E",
-          }}
-        >
-          {props.value === "verified" ? (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: 10,
-              }}
-            >
-              <div
-                style={{
-                  height: 6,
-                  width: 6,
-                  backgroundColor: " #065F46",
-                  borderRadius: 50,
-                }}
-              />
-              <span>Approved</span>
-            </div>
-          ) : props.value == "unverified" ? (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: 10,
-              }}
-            >
-              <div
-                style={{
-                  height: 6,
-                  width: 6,
-                  backgroundColor: "#991B1B",
-                  borderRadius: 50,
-                }}
-              />
-              <span>Unapproved</span>
-            </div>
-          ) : (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: 10,
-              }}
-            >
-              <div
-                style={{
-                  height: 6,
-                  width: 6,
-                  backgroundColor: "#92400E",
-                  borderRadius: 50,
-                }}
-              />
-              <span>Pending</span>
-            </div>
-          )}
-        </div>
-      );
+    Header: "Type",
+    accessor: "Clinic.clinic_type",
+    Cell: ({ value }) => {
+      // Map clinic_type values to display text
+      const typeMap = {
+        in_clinic: "In Clinic",
+        in_House: "In House",
+        telemedicine: "Telemedicine",
+      };
+      // Return mapped value or fallback to "N/A" if undefined or unmapped
+      return typeMap[value] || "N/A";
     },
   },
+  // {
+  //   Header: "SELLER STATUS",
+  //   accessor: "status",
+  //   Cell: (props) => {
+  //     return (
+  //       <div
+  //         style={{
+  //           backgroundColor:
+  //             props.value === "verified"
+  //               ? " #D1FAE5"
+  //               : props.value == "unverified"
+  //               ? "#FEE2E2"
+  //               : "#FEF3C7",
+  //           borderRadius: 15,
+  //           padding: 6,
+  //           textAlign: "center",
+  //           color:
+  //             props.value === "verified"
+  //               ? " #065F46"
+  //               : props.value === "unverified"
+  //               ? "#991B1B"
+  //               : "#92400E",
+  //         }}
+  //       >
+  //         {props.value === "verified" ? (
+  //           <div
+  //             style={{
+  //               display: "flex",
+  //               justifyContent: "center",
+  //               alignItems: "center",
+  //               gap: 10,
+  //             }}
+  //           >
+  //             <div
+  //               style={{
+  //                 height: 6,
+  //                 width: 6,
+  //                 backgroundColor: " #065F46",
+  //                 borderRadius: 50,
+  //               }}
+  //             />
+  //             <span>Approved</span>
+  //           </div>
+  //         ) : props.value == "unverified" ? (
+  //           <div
+  //             style={{
+  //               display: "flex",
+  //               justifyContent: "center",
+  //               alignItems: "center",
+  //               gap: 10,
+  //             }}
+  //           >
+  //             <div
+  //               style={{
+  //                 height: 6,
+  //                 width: 6,
+  //                 backgroundColor: "#991B1B",
+  //                 borderRadius: 50,
+  //               }}
+  //             />
+  //             <span>Unapproved</span>
+  //           </div>
+  //         ) : (
+  //           <div
+  //             style={{
+  //               display: "flex",
+  //               justifyContent: "center",
+  //               alignItems: "center",
+  //               gap: 10,
+  //             }}
+  //           >
+  //             <div
+  //               style={{
+  //                 height: 6,
+  //                 width: 6,
+  //                 backgroundColor: "#92400E",
+  //                 borderRadius: 50,
+  //               }}
+  //             />
+  //             <span>Pending</span>
+  //           </div>
+  //         )}
+  //       </div>
+  //     );
+  //   },
+  // },
 ];
 
 export const COLUMNS_ORDERS = [
@@ -578,12 +594,26 @@ export const COLUMNS_ORDERS = [
       );
     },
   },
+   {
+    Header: "Type",
+    accessor: "cart.slotReservations",
+    Cell: ({ value }) => {
+      // Log value for debugging
+      console.log("cart.slotReservations value:", value);
+      // Check if value is an array and determine display text
+      if (Array.isArray(value)) {
+        return value.length === 0 ? "Service" : "Doctor";
+      }
+      // Fallback for non-array or undefined values
+      return "N/A";
+    },
+  },
   { Header: "TOTAL", accessor: "total_price" },
-  { Header: "NAME", accessor: "cart.customer.first_name" },
-  { Header: "Location", accessor: "cart.location" },
+  { Header: "NAME", accessor: "patient_info.fName" },
+  // { Header: "Location", accessor: "cart.location" },
   {
     Header: "EMAIL",
-    accessor: "cart.customer.email",
+    accessor: "patient_info.email",
   },
 ];
 
@@ -1009,16 +1039,16 @@ export const COLUMNS_ORDER_BOOKING = [
   {
     Header: slsort,
     accessor: "slotTiming",
-    Cell: ({ value }) => {
-      try {
-        if (!value) return "N/A"; // Handle empty or undefined values
-        const time = parse(value, "HH:mm:ss", new Date());
-        return isValid(time) ? format(time, "hh:mm a") : "Invalid Time";
-      } catch (error) {
-        console.error("Error parsing time:", error);
-        return "Invalid Time";
-      }
-    },
+    // Cell: ({ value }) => {
+    //   try {
+    //     if (!value) return "N/A"; // Handle empty or undefined values
+    //     const time = parse(value, "HH:mm:ss", new Date());
+    //     return isValid(time) ? format(time, "hh:mm a") : "Invalid Time";
+    //   } catch (error) {
+    //     console.error("Error parsing time:", error);
+    //     return "Invalid Time";
+    //   }
+    // },
   },
 ];
 

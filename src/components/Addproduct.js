@@ -70,13 +70,13 @@ export default function Addproduct(props) {
   const fetchDepartments = async () => {
     try {
       const response = await axios.get(
-        `${url}/v1/department/get-by-clinicId?id=${props?.storeId}`,
+        `${url}/v1/department/get`,
         {
           headers: { authtoken: authToken, sessionid: session_id },
         }
       );
       setDepartments(
-        response?.data?.data?.departmentsWithCount?.map((e) => ({
+        response?.data?.data?.map((e) => ({
           label: e.title,
           value: e.id,
         }))

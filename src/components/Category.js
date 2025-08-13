@@ -26,19 +26,14 @@ export default function Categories({ setName, storeId }) {
       toast("Categories loading, please wait...", {
         progress: true,
       });
-      const response = await axios.get(
-        `${url}/v1/department/get-by-clinicId?id=${storeId}`,
-        {
-          headers: { authtoken: authToken, sessionid: session_id },
-        }
-      );
+      const response = await axios.get(`${url}/v1/department/get`, {
+        headers: { authtoken: authToken, sessionid: session_id },
+      });
       toast.dismiss();
 
       console.log(response);
       // Filter only main categories (those with an 'id' field)
-      const mainCategories = response?.data?.data?.departmentsWithCount?.filter(
-        (item) => item.id
-      );
+      const mainCategories = response?.data?.data?.filter((item) => item.id);
       setCategories(mainCategories);
       setOriginalData(mainCategories); // Store main categories for search reset
     } catch (err) {
