@@ -105,11 +105,11 @@ function App() {
 
             <Route
               path="service_package"
-              element={<ServicePackage setName={setName} />}
+              element={<ServicePackage setName={setName} storeId={storeId}/>}
             ></Route>
             <Route
               path="add_service_package"
-              element={<AddServicePackage setName={setName} />}
+              element={<AddServicePackage setName={setName} storeId={storeId}/>}
             ></Route>
             <Route
               path="doctors_detail"

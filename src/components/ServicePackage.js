@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { url } from "../utils/urls.js";
 
-export default function ServicePackage({ setName }) {
+export default function ServicePackage({ setName, storeId }) {
   const nav = useNavigate();
   const [authToken] = useState(localStorage.getItem("authToken") || "");
   const [session_id] = useState(localStorage.getItem("session_id") || "");
@@ -24,14 +24,17 @@ export default function ServicePackage({ setName }) {
       toast("Service Packages loading, please wait...", {
         progress: true,
       });
-      const response = await axios.get(`${url}/v1/service-packages`, {
-        headers: { authtoken: authToken, sessionid: session_id },
-      });
+      const response = await axios.get(
+        `${url}/v1/service-packages/clinic/${storeId}`,
+        {
+          headers: { authtoken: authToken, sessionid: session_id },
+        }
+      );
       toast.dismiss();
 
       const mainCategories = response.data.data.filter((item) => item.id);
       setCategories(mainCategories);
-      setOriginalData(mainCategories); 
+      setOriginalData(mainCategories);
     } catch (err) {
       toast.dismiss();
       toast.error("Failed to load categories");
@@ -64,7 +67,7 @@ export default function ServicePackage({ setName }) {
     fetchdata();
     setName("service_package");
     setSearchString("");
-  }, [authToken, session_id, setName, showPopup]); // Added missing dependencies
+  }, [authToken, session_id, setName, showPopup,storeId]); // Added missing dependencies
 
   const data = useMemo(() => categories, [categories]);
   const columns = useMemo(() => COLUMNS_Packages, []);
@@ -93,9 +96,7 @@ export default function ServicePackage({ setName }) {
     <div className="page">
       <div className="content">
         <div className="add-link">
-          <div className="category" 
-        //   onClick={() => nav("add-doctor")}
-          >
+          <div className="category" onClick={() => nav("/add_service_package")}>
             <button
               className="cat-popup page-big-headings"
               onClick={() => {

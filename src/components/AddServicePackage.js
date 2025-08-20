@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "../styles/addforms.css";
-import CreatableSelect from "react-select";
 import Select from "react-select";
-import imageicon from "../assets/Imageicon.png";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import backicon from "../assets/back.png";
-import Rating from "react-rating-stars-component";
+import imageicon from "../assets/Imageicon.png";
 import { url } from "../utils/urls.js";
 
 export default function AddServicePackage(props) {
@@ -19,59 +17,45 @@ export default function AddServicePackage(props) {
     location.state?.data || props.previousData || ""
   );
   const [store_id] = useState(props.storeId || previousData?.store_id || "");
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [media, setMedia] = useState(previousData?.profilePhoto || "");
+  const [NewArray, setNewArray] = useState();
 
-  // State for doctor fields
+  // Static options for components and serviceLocationOptions
+  const componentOptions = [
+    { label: "Normal Saline", value: "Normal Saline" },
+    { label: "Electrolytes", value: "Electrolytes" },
+    { label: "Vitamin C", value: "Vitamin C" },
+    { label: "Glucose", value: "Glucose" },
+  ];
+  const locationOptions = [
+    { label: "At Home", value: "At Home" },
+    { label: "Clinic", value: "In Clinic" },
+  ];
+
+  // State for service package fields
   const [doctor, setDoctor] = useState({
     type: previousData?.type || "",
     name: previousData?.name || "",
-    components: previousData?.components || "",
-    serviceLocationOptions: previousData?.serviceLocationOptions || "",
+    components: previousData?.components || [],
+    serviceLocationOptions: previousData?.serviceLocationOptions || [],
     clinicPrice: previousData?.clinicPrice || "",
     homePrice: previousData?.homePrice || "",
-    sessionPackages: previousData?.sessionPackages || "",
+    sessionPackages: previousData?.sessionPackages || [],
   });
-  const [profilePhoto, setProfilePhoto] = useState(null);
-  const [degreeCertificate, setDegreeCertificate] = useState(null);
-  const [specialistCertification, setSpecialistCertification] = useState(null);
-  const [media, setMedia] = useState(previousData?.profilePhoto || "");
-  const [departments, setDepartments] = useState([]);
 
-  // Gender options
-  const genderOptions = [
-    { label: "Male", value: "Male" },
-    { label: "Female", value: "Female" },
-    { label: "Other", value: "Other" },
-  ];
-
-  // Fetch departments
-  const fetchDepartments = async () => {
-    try {
-      const response = await axios.get(`${url}/v1/department/get`, {
-        headers: { authtoken: authToken, sessionid: session_id },
-      });
-      setDepartments(
-        response.data.data.map((e) => ({ label: e.name, value: e.id }))
-      );
-    } catch (error) {
-      console.error("Fetch departments error:", error);
-      toast.error("Failed to fetch departments");
-    }
-  };
-
-  useEffect(() => {
-    fetchDepartments();
-  }, []);
+  console.log(doctor?.serviceLocationOptions);
 
   useEffect(() => {
     setPreviousData(location.state?.data || props.previousData || "");
     setDoctor({
       type: previousData?.type || "",
       name: previousData?.name || "",
-      components: previousData?.components || "",
-      serviceLocationOptions: previousData?.serviceLocationOptions || "",
+      components: previousData?.components || [],
+      serviceLocationOptions: previousData?.serviceLocationOptions || [],
       clinicPrice: previousData?.clinicPrice || "",
       homePrice: previousData?.homePrice || "",
-      sessionPackages: previousData?.sessionPackages || "",
+      sessionPackages: previousData?.sessionPackages || [],
     });
     setMedia(previousData?.profilePhoto || "");
   }, [previousData, props.previousData, location.state]);
@@ -91,87 +75,34 @@ export default function AddServicePackage(props) {
   };
 
   // Handle array fields
-  const handleArrayEvent = (e, key) => {
-    setDoctor({ ...doctor, [key]: e });
+  const handleArrayEvent = (selectedOptions, key) => {
+    const values = selectedOptions.map((option) => option.value);
+    setDoctor({ ...doctor, [key]: values });
   };
 
-  // Handle education certifications
-  const handleEducationCertifications = (e) => {
-    const { name, value } = e.target;
-    setDoctor((prev) => ({
-      ...prev,
-      educationCertifications: {
-        ...prev.educationCertifications,
-        [name]: value,
-      },
-    }));
-  };
-
-  // Upload media
-  const uploadMedia = async (file) => {
-    if (!file) return null;
-    const formData = new FormData();
-    formData.append("media", file);
-    try {
-      const response = await axios.post(
-        `${url}/v1/store/media/upload`,
-        formData,
-        {
-          headers: {
-            authtoken: authToken,
-            sessionid: session_id,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      return "sellers/" + response.data.fileKey;
-    } catch (error) {
-      console.error("Media upload failed:", error);
-      toast.error(error.response?.data?.message || "Media upload failed");
-      return null;
-    }
-  };
-
-  // Submit doctor
+  // Submit service package
   const formSubmit = async (formData) => {
     try {
-      const endpoint = `${url}/v1/doctor/create`;
-      //  previousData?.id
-      //   ? `${url}/v1/doctor/create`
-      //   : `${url}/v1/doctor/update`;
+      const endpoint = previousData?.id
+        ? `${url}/v1/service-packages/update`
+        : `${url}/v1/service-packages/create`;
       const response = await axios.post(endpoint, formData, {
         headers: { authtoken: authToken, sessionid: session_id },
       });
-      toast.success(previousData?.id ? "Doctor updated" : "Doctor created");
+      toast.success("Service package created");
       setDoctor({
+        type: "",
         name: "",
-        gender: "",
-        nationality: "",
-        personalMobileNumber: "",
-        personalEmailAddress: "",
-        licenseExpiryDate: "",
-        regulatingAuthority: "",
-        professionalTitle: "",
-        fees: "",
-        primaryLocation: "",
-        experience: "",
-        languages: [],
-        surgeon: false,
-        specialties: [],
-        educationCertifications: {},
-        degreeQualification: "",
-        universityName: "",
-        yearOfGraduation: "",
-        averageRating: "",
-        aboutMe: "",
-        department_id: "",
+        components: [],
+        serviceLocationOptions: [],
+        clinicPrice: "",
+        homePrice: "",
+        sessionPackages: [],
       });
       setProfilePhoto(null);
-      setDegreeCertificate(null);
-      setSpecialistCertification(null);
       setMedia("");
       props.setPreviousData?.(null);
-      navigate("/doctors"); // Adjust to your route
+      navigate("/service_package");
     } catch (error) {
       console.error("Form submit error:", error);
       toast.error(error.response?.data?.error || "Request failed");
@@ -183,26 +114,18 @@ export default function AddServicePackage(props) {
     event.preventDefault();
     toast("Request loading, please wait", { progress: true });
     try {
-      const profilePhotoUrl = await uploadMedia(profilePhoto);
-      const degreeCertificateUrl = await uploadMedia(degreeCertificate);
-      const specialistCertificateUrl = await uploadMedia(
-        specialistCertification
-      );
+      // const profilePhotoUrl = await uploadMedia(profilePhoto);
       // if (!profilePhotoUrl && !previousData?.profilePhoto) {
       //   toast.error("Profile photo is required");
       //   return;
       // }
       const formData = {
         ...doctor,
-        id: previousData?.id, // Include id for updates
-        profilePhoto: profilePhotoUrl || doctor.profilePhoto,
-        degreeCertificate: degreeCertificateUrl || doctor.degreeCertificate,
-        specialistCertification:
-          specialistCertificateUrl || doctor.specialistCertification,
-        languages: doctor.languages.map((lang) => lang.value),
-        specialties: doctor.specialties.map((spec) => spec.value),
-        fees: parseFloat(doctor.fees) || 0,
-        averageRating: parseFloat(doctor.averageRating) || 0,
+        id: previousData?.id,
+        clinic_id: props.storeId,
+        // profilePhoto: profilePhotoUrl || doctor.profilePhoto,
+        clinicPrice: parseFloat(doctor.clinicPrice) || 0,
+        homePrice: parseFloat(doctor.homePrice) || 0,
       };
       await formSubmit(formData);
     } catch (error) {
@@ -225,302 +148,86 @@ export default function AddServicePackage(props) {
             <button
               className="back-btn"
               type="button"
-              onClick={() => navigate("/doctors")}
+              onClick={() => navigate("/service_package")}
             >
               <img src={backicon} alt="back" className="back-icon" />
             </button>
           </div>
-          <span className="form-heading">{doctor.name || "Add Doctor"}</span>
+          <span className="form-heading">
+            {doctor.name || "Add Service Package"}
+          </span>
           <button type="submit" className="submit-btn addp">
             {previousData?.id ? "Update" : "Create"}
           </button>
         </div>
-        {doctor.averageRating ? (
-          <div className="form-header" style={{ paddingLeft: "35px" }}>
-            <Rating
-              count={5}
-              value={parseFloat(doctor.averageRating)}
-              size={30}
-              edit={false}
-              isHalf={true}
-              emptyIcon={<i className="far fa-star"></i>}
-              halfIcon={<i className="fa fa-star-half-alt"></i>}
-              fullIcon={<i className="fa fa-star"></i>}
-            />
-            <span className="form-heading">{doctor.averageRating}/5</span>
-          </div>
-        ) : null}
+
         <div className="form-body">
           <div className="form-content">
             <div className="content-right">
               <input
                 required
                 type="text"
+                name="type"
+                placeholder="Service Type"
+                className="field"
+                value={doctor.type}
+                onChange={handleDoctorChange}
+              />
+              <input
+                required
+                type="text"
                 name="name"
-                placeholder="Name"
+                placeholder="Service Name"
                 className="field"
                 value={doctor.name}
                 onChange={handleDoctorChange}
               />
               <Select
+                isMulti
                 styles={{ control: customColor }}
-                options={genderOptions}
-                value={genderOptions.find((opt) => opt.value === doctor.gender)}
-                onChange={(e) =>
-                  handleDoctorChange({
-                    target: { name: "gender", value: e.value },
-                  })
+                options={componentOptions}
+                value={doctor.components.map((value) => ({
+                  label: value,
+                  value,
+                }))}
+                onChange={(selectedOptions) =>
+                  handleArrayEvent(selectedOptions, "components")
                 }
-                placeholder="Gender"
-              />
-              <input
-                required
-                type="text"
-                name="nationality"
-                placeholder="Nationality"
+                placeholder="Select Components"
                 className="field"
-                value={doctor.nationality}
-                onChange={handleDoctorChange}
-              />
-              <input
-                required
-                type="text"
-                name="personalMobileNumber"
-                placeholder="Personal Mobile Number"
-                className="field"
-                value={doctor.personalMobileNumber}
-                onChange={handleDoctorChange}
-              />
-              <input
-                required
-                type="email"
-                name="personalEmailAddress"
-                placeholder="Personal Email Address"
-                className="field"
-                value={doctor.personalEmailAddress}
-                onChange={handleDoctorChange}
-              />
-              <input
-                required
-                type="date"
-                name="licenseExpiryDate"
-                placeholder="License Expiry Date"
-                className="field"
-                value={doctor.licenseExpiryDate}
-                onChange={handleDoctorChange}
-              />
-              <input
-                required
-                type="text"
-                name="regulatingAuthority"
-                placeholder="Regulating Authority"
-                className="field"
-                value={doctor.regulatingAuthority}
-                onChange={handleDoctorChange}
-              />
-              <input
-                required
-                type="text"
-                name="professionalTitle"
-                placeholder="Professional Title"
-                className="field"
-                value={doctor.professionalTitle}
-                onChange={handleDoctorChange}
-              />
-              <input
-                required
-                type="number"
-                name="fees"
-                placeholder="Fees"
-                className="field"
-                value={doctor.fees}
-                onChange={handleDoctorChange}
-              />
-              <input
-                required
-                type="text"
-                name="primaryLocation"
-                placeholder="Primary Location"
-                className="field"
-                value={doctor.primaryLocation}
-                onChange={handleDoctorChange}
-              />
-              <input
-                required
-                type="text"
-                name="experience"
-                placeholder="Experience (e.g., 12 years)"
-                className="field"
-                value={doctor.experience}
-                onChange={handleDoctorChange}
-              />
-              <CreatableSelect
-                isMulti
-                styles={{ control: customColor }}
-                value={doctor.languages}
-                onChange={(e) => handleArrayEvent(e, "languages")}
-                placeholder="Languages"
-                className="field"
-              />
-              <div>
-                <label>
-                  <input
-                    type="checkbox"
-                    name="surgeon"
-                    checked={doctor.surgeon}
-                    onChange={(e) =>
-                      setDoctor({ ...doctor, surgeon: e.target.checked })
-                    }
-                  />
-                  Surgeon
-                </label>
-              </div>
-              <CreatableSelect
-                isMulti
-                styles={{ control: customColor }}
-                value={doctor.specialties}
-                onChange={(e) => handleArrayEvent(e, "specialties")}
-                placeholder="Specialties"
-                className="field"
-              />
-              <input
-                type="text"
-                name="FCPS"
-                placeholder="FCPS Certification"
-                className="field"
-                value={doctor.educationCertifications.FCPS || ""}
-                onChange={handleEducationCertifications}
-              />
-              <input
-                type="text"
-                name="MRCP"
-                placeholder="MRCP Certification"
-                className="field"
-                value={doctor.educationCertifications.MRCP || ""}
-                onChange={handleEducationCertifications}
-              />
-              <input
-                required
-                type="text"
-                name="degreeQualification"
-                placeholder="Degree Qualification"
-                className="field"
-                value={doctor.degreeQualification}
-                onChange={handleDoctorChange}
-              />
-              <input
-                required
-                type="text"
-                name="universityName"
-                placeholder="University Name"
-                className="field"
-                value={doctor.universityName}
-                onChange={handleDoctorChange}
-              />
-              <input
-                required
-                type="number"
-                name="yearOfGraduation"
-                placeholder="Year of Graduation"
-                className="field"
-                value={doctor.yearOfGraduation}
-                onChange={handleDoctorChange}
-              />
-              <input
-                required
-                type="number"
-                step="0.1"
-                name="averageRating"
-                placeholder="Average Rating (e.g., 4.7)"
-                className="field"
-                value={doctor.averageRating}
-                onChange={handleDoctorChange}
-              />
-              <textarea
-                required
-                name="aboutMe"
-                placeholder="About Me"
-                className="field description"
-                value={doctor.aboutMe}
-                onChange={handleDoctorChange}
               />
               <Select
+                isMulti
                 styles={{ control: customColor }}
-                options={departments}
-                value={departments.find(
-                  (opt) => opt.value === doctor.department_id
-                )}
-                onChange={(e) =>
-                  handleDoctorChange({
-                    target: { name: "department_id", value: e.value },
-                  })
+                options={locationOptions}
+                value={doctor.serviceLocationOptions.map((value) => ({
+                  label: value === "In Clinic" ? "Clinic" : value,
+                  value,
+                }))}
+                onChange={(selectedOptions) =>
+                  handleArrayEvent(selectedOptions, "serviceLocationOptions")
                 }
-                placeholder="Department"
+                placeholder="Select Service Location Options"
                 className="field"
               />
-            </div>
-            <div className="form-image">
-              {[
-                {
-                  id: "profilePhoto",
-                  label: "Upload Profile Photo",
-                  file: profilePhoto,
-                  setter: setProfilePhoto,
-                },
-                {
-                  id: "degreeCertificate",
-                  label: "Upload Degree Certificate",
-                  file: degreeCertificate,
-                  setter: setDegreeCertificate,
-                },
-                {
-                  id: "specialistCertification",
-                  label: "Upload Specialist Certification",
-                  file: specialistCertification,
-                  setter: setSpecialistCertification,
-                },
-              ].map(({ id, label, file, setter }) => (
-                <div className="image-sec" key={id}>
-                  <div className="imageicon">
-                    <img
-                      src={
-                        file
-                          ? URL.createObjectURL(file)
-                          : id === "profilePhoto" && media
-                          ? media.substring(0, 4) === "http"
-                            ? media
-                            : `https://petsetgostorage.blob.core.windows.net/petsetgo-u2/${media}`
-                          : imageicon
-                      }
-                      alt={label}
-                      className="image"
-                    />
-                  </div>
-                  <div className="imagehead">
-                    <label htmlFor={id} style={{ cursor: "pointer" }}>
-                      {label}
-                    </label>
-                    <input
-                      type="file"
-                      id={id}
-                      name={id}
-                      onChange={handleFileChange(setter)}
-                      className="file"
-                    />
-                  </div>
-                  <span className="imagepg">
-                    Upload an image for your{" "}
-                    {id === "profilePhoto"
-                      ? "profile"
-                      : id === "degreeCertificate"
-                      ? "degree certificate"
-                      : "specialist certification"}
-                    .
-                    <br />
-                    File Format jpeg, png Recommended Size 600x600 (1:1)
-                  </span>
-                </div>
-              ))}
+              <input
+                required
+                type="number"
+                name="clinicPrice"
+                placeholder="Clinic Price"
+                className="field"
+                value={doctor.clinicPrice}
+                onChange={handleDoctorChange}
+              />
+              <input
+                required
+                type="number"
+                name="homePrice"
+                placeholder="Home Price"
+                className="field"
+                value={doctor.homePrice}
+                onChange={handleDoctorChange}
+              />
             </div>
           </div>
         </div>
