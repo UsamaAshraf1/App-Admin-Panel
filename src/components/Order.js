@@ -3,7 +3,7 @@ import "../styles/order.css";
 import "../styles/modal.css";
 import personicon from "../assets/personicon.png";
 import foldericon from "../assets/foldericon.png";
-import { COLUMNS_ORDER_BOOKING } from "../utils/Col";
+import { COLUMNS_ORDER_BOOKING, COLUMNS_ORDER_BOARDING } from "../utils/Col";
 import { usePagination, useTable, useSortBy } from "react-table";
 import { useLocation, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
@@ -110,13 +110,17 @@ const RescheduleModal = ({ isOpen, onClose, data, setVlaue }) => {
       return;
     }
     try {
-      const response = await axios.post(`${url}/v1/order/reschedule-slot-by-clinic`, {
-        order_id: data?.order_id,
-        delete_slot_id: data?.cart?.ServiceReservations[0]?.service_reservation_id,
-        slotTiming: selectedSlot,
-        slotDate: selectedDate,
-        slotDay: DoctorSlots?.day,
-      });
+      const response = await axios.post(
+        `${url}/v1/order/reschedule-slot-by-clinic`,
+        {
+          order_id: data?.order_id,
+          delete_slot_id:
+            data?.cart?.ServiceReservations[0]?.service_reservation_id,
+          slotTiming: selectedSlot,
+          slotDate: selectedDate,
+          slotDay: DoctorSlots?.day,
+        }
+      );
       toast.success("Reshedule Done");
       setVlaue("Reschedule");
       onClose();
@@ -158,7 +162,13 @@ const RescheduleModal = ({ isOpen, onClose, data, setVlaue }) => {
             </button>
           </div>
           <div className="modal-body">
-            <form onSubmit={data?.cart?.doctor_id === null ? handlePackageSubmit : handleSubmit}>
+            <form
+              onSubmit={
+                data?.cart?.doctor_id === null
+                  ? handlePackageSubmit
+                  : handleSubmit
+              }
+            >
               <div className="modal-field">
                 <label className="chead">Select Date</label>
                 <input
@@ -310,6 +320,38 @@ export default function Order() {
   }
 
   console.log(presviosData);
+
+  useEffect(() => {
+    if (presviosData?.cart?.slotReservations?.length > 0) {
+      // If slotReservations exist, activate Booking Items tab
+      setOrderData(presviosData.cart.slotReservations);
+      setColumns(COLUMNS_ORDER_BOOKING);
+      setBookClass(true);
+      setBoardClass(false);
+      setProdClass(false);
+      setVidClass(false);
+      setAdopClass(false);
+    } else if (presviosData?.cart?.serviceReservations?.length > 0) {
+      // If serviceReservations exist, activate Service Items tab
+      setOrderData(presviosData.cart.serviceReservations);
+      setColumns(COLUMNS_ORDER_BOOKING);
+      setBookClass(false);
+      setBoardClass(true);
+      setProdClass(false);
+      setVidClass(false);
+      setAdopClass(false);
+    } else {
+      // Fallback: no data, keep Booking Items as default
+      setOrderData([]);
+      setColumns(COLUMNS_ORDER_BOOKING);
+      setBookClass(true);
+      setBoardClass(false);
+      setProdClass(false);
+      setVidClass(false);
+      setAdopClass(false);
+    }
+  }, [presviosData]);
+  console.log(presviosData?.cart?.serviceReservations);
   return (
     <div>
       <div className="order-content">
@@ -428,6 +470,22 @@ export default function Order() {
               </div>
             </div>
           </div>
+          <div>
+            {presviosData?.cart?.serviceReservations ? (
+              <div>
+                <div>
+                  <p style={{marginLeft:"10px"}}>
+                    {presviosData?.cart?.serviceReservations[0]
+                      ?.reservation_type === "telemedicine"
+                      ? `Link: ${presviosData?.cart?.serviceReservations[0]?.video_link}`
+                      : ``}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
           <div className="order-table-div">
             <div className="tab-header">
               <span
@@ -448,8 +506,31 @@ export default function Order() {
                 Booking Items{" "}
                 <span style={{ fontWeight: 600 }}>
                   {presviosData?.cart?.slotReservations?.length > 0
-                    ? presviosData?.cart?.slotReservations.length
-                    : presviosData?.cart?.ServiceReservations.length}
+                    ? presviosData?.cart?.slotReservations?.length
+                    : presviosData?.cart?.ServiceReservations?.length}
+                </span>
+              </span>
+
+              <span
+                className={
+                  bookClass ? "table-heading table-heading-bg" : "table-heading"
+                }
+                onClick={() => {
+                  setOrderData(presviosData?.cart?.serviceReservations);
+                  setColumns(COLUMNS_ORDER_BOOKING);
+                  setProdClass(false);
+                  setBoardClass(false);
+                  setVidClass(false);
+                  setAdopClass(false);
+                  setBookClass(true);
+                }}
+                style={{ cursor: "pointer" }}
+              >
+                Service Items{" "}
+                <span style={{ fontWeight: 600 }}>
+                  {presviosData?.cart?.serviceReservations?.length > 0
+                    ? presviosData?.cart?.serviceReservations?.length
+                    : presviosData?.cart?.ServiceReservations?.length}
                 </span>
               </span>
             </div>

@@ -121,6 +121,8 @@ export default function Addseller() {
       ? presviosData.commission_rate
       : 0.0,
     shipmentFee: presviosData?.shipmentFee ? presviosData.shipmentFee : 0.0,
+    Latitude: presviosData?.Latitude ? presviosData.Latitude : 0,
+    Longitude: presviosData?.Longitude ? presviosData.Longitude : 0,
     place_id: null,
   });
   const [defaultSerList, setDefaulist] = useState(
@@ -480,6 +482,8 @@ export default function Addseller() {
     }
   }
 
+  console.log(seller)
+
   async function handleSubmit(event) {
     toast("request loading please wait", {
       progress: true,
@@ -588,12 +592,12 @@ export default function Addseller() {
             service_list: [],
             clinic_open: formData?.store_open,
             clinic_close: formData?.store_close,
+            Latitude: formData?.Latitude,
+            Longitude: formData?.Longitude,
           };
-          const response = await axios.post(
-            `${url}/v1/clinic/create`,
-            Data,
-            { headers: { authtoken: authToken, sessionid: session_id } }
-          );
+          const response = await axios.post(`${url}/v1/clinic/create`, Data, {
+            headers: { authtoken: authToken, sessionid: session_id },
+          });
           if (response) {
             toast.dismiss();
             toast("Store Created Successfully", {
@@ -798,6 +802,8 @@ export default function Addseller() {
         ? presviosData.commission_rate
         : 0.0,
       shipmentFee: presviosData?.shipmentFee ? presviosData.shipmentFee : 0.0,
+      Latitude: presviosData?.Latitude ? presviosData.Latitude : 0,
+      Longitude: presviosData?.Longitude ? presviosData.Longitude : 0,
       place_id: null,
     });
   }, [presviosData]);
@@ -941,6 +947,32 @@ export default function Addseller() {
                   value={seller.phone_number}
                   onChange={handleSellerChange}
                   placeholder="Phone Number"
+                  className="field"
+                />
+              </div>
+
+              <div>
+                <input
+                  required
+                  type="number"
+                  name="Latitude"
+                  id="Latitude"
+                  value={seller.Latitude}
+                  onChange={handleSellerChange}
+                  placeholder="Latitude"
+                  className="field"
+                />
+              </div>
+
+              <div>
+                <input
+                  required
+                  type="number"
+                  name="Longitude"
+                  id="Longitude"
+                  value={seller.Longitude}
+                  onChange={handleSellerChange}
+                  placeholder="Longitude"
                   className="field"
                 />
               </div>
@@ -1088,6 +1120,7 @@ export default function Addseller() {
                   className="field"
                 />
               </div>
+
               {/* <div>
                 <span className="form-headings">
                   Delivery time & Pickup Number

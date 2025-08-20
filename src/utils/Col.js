@@ -1254,10 +1254,8 @@ function calculateAge(dob) {
 }
 
 export const CUSTOMERS = [
-  { Header: "ID", accessor: "customer_id" },
-  { Header: "NAME", accessor: "first_name" },
+  { Header: "NAME", accessor: "firstName" },
   { Header: "NUMBER", accessor: "phone" },
-  { Header: "Emirate Id", accessor: "emirate_id" },
   { Header: "EMAIL", accessor: "email" },
   {
     Header: "DATE & TIME",

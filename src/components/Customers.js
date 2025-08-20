@@ -119,6 +119,7 @@ export default function Customers(props) {
   };
 
   const data = useMemo(() => customers, [customers]);
+  console.log(data)
   const columns = useMemo(() => CUSTOMERS, []);
   const tableinstance = useTable({ columns, data }, useSortBy, usePagination);
   const {
